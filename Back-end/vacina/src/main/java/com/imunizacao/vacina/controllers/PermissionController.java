@@ -1,9 +1,6 @@
 package com.imunizacao.vacina.controllers;
 
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
-
-import com.imunizacao.vacina.model.Permission;
+import com.imunizacao.vacina.model.dto.PermissionDTO;
 import com.imunizacao.vacina.services.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 @RestController
 @RequestMapping("/permission")
 public class PermissionController {
@@ -23,10 +23,10 @@ public class PermissionController {
     private PermissionService permissionService;
 
     @Autowired
-    private PagedResourcesAssembler<Permission> assembler;
+    private PagedResourcesAssembler<PermissionDTO> assembler;
 
     @PostMapping
-    public Permission create(@RequestBody Permission permission) throws Exception {
+    public PermissionDTO create(@RequestBody PermissionDTO permission) throws Exception {
         var entity = permissionService.create(permission);
 
         entity.add(linkTo(methodOn(PermissionController.class).findById(entity.getId())).withSelfRel());
@@ -34,7 +34,7 @@ public class PermissionController {
     }
 
     @GetMapping(value = "/{id}")
-    public Permission findById(@PathVariable("id") Long id){
+    public PermissionDTO findById(@PathVariable("id") Long id){
         var entity = permissionService.findById(id);
 
         entity.add(linkTo(methodOn(PermissionController.class).findById(entity.getId())).withSelfRel());
@@ -42,7 +42,7 @@ public class PermissionController {
     }
 
     @GetMapping(value = "/findByDescription/{description}")
-    public Permission findByDescription(@PathVariable("description") String description){
+    public PermissionDTO findByDescription(@PathVariable("description") String description){
         var entity = permissionService.findByDescription(description);
 
         entity.add(linkTo(methodOn(PermissionController.class).findById(entity.getId())).withSelfRel());

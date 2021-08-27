@@ -1,6 +1,9 @@
 package com.imunizacao.vacina.services;
 
-import com.imunizacao.vacina.model.User;
+import com.imunizacao.vacina.model.entities.Permission;
+import com.imunizacao.vacina.model.entities.User;
+import com.imunizacao.vacina.model.dto.UserDTO;
+import com.imunizacao.vacina.repositories.PermissionRepository;
 import com.imunizacao.vacina.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService implements UserDetailsService {
 
@@ -19,6 +25,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PermissionRepository permissionRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -31,21 +40,47 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User create(User user) throws Exception {
-        if (userRepository.findByUserName(user.getUsername()) != null) {
-            throw new Exception("Username " + user.getUsername() + " alreary exists");
+    public UserDTO create(UserDTO user) throws Exception {
+        if (userRepository.findByUserName(user.getUserName()) != null) {
+            throw new Exception("Username " + user.getUserName() + " alreary exists");
         }
 
-        user.setPassword(encoder.encode(user.getPassword()));
+        var entity = new User(user);
+        entity.setPassword(encoder.encode(user.getPassword()));
+        entity.setPermissions(getPermission(user.getRoles()));
 
-        return userRepository.save(user);
+        return new UserDTO(userRepository.save(entity));
     }
 
-    public User findById(Long id){
-        return userRepository.findById(id).orElseThrow();
+    private List<Permission> getPermission(List<String> roles) throws Exception{
+
+        List<Permission> list = new ArrayList<>();
+
+        for (String r : roles){
+            var permission = permissionRepository.findById(Long.parseLong(r)).orElseThrow();
+            if (permission == null){
+                throw new Exception("Permission " + r + " nao encontrada");
+            } else {
+                list.add(permission);
+            }
+        }
+
+        return list;
     }
 
-    public Page<User> findAll(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public UserDTO findById(Long id){
+        var entity = userRepository.findById(id).orElseThrow();
+
+        return new UserDTO(entity);
     }
+
+    public Page<UserDTO> findAll(Pageable pageable) {
+        var entityList = userRepository.findAll(pageable);
+        return entityList.map(this::convertToDTO);
+    }
+
+    public UserDTO convertToDTO(User user){
+        return new UserDTO(user);
+    }
+
 }

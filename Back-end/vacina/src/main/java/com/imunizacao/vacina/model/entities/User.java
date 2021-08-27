@@ -1,6 +1,7 @@
-package com.imunizacao.vacina.model;
+package com.imunizacao.vacina.model.entities;
 
-import org.springframework.hateoas.RepresentationModel;
+import com.imunizacao.vacina.model.dto.UserDTO;
+import com.imunizacao.vacina.model.entities.Permission;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_postgres")
-public class User extends RepresentationModel<User> implements Serializable, UserDetails {
+public class User implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +30,20 @@ public class User extends RepresentationModel<User> implements Serializable, Use
         inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();
 
+    public User(Long id, String fullName, String userName, String password, List<Permission> permissions) {
+        this.id = id;
+        this.fullName = fullName;
+        this.userName = userName;
+        this.password = password;
+        this.permissions = permissions;
+    }
+
+    public User(UserDTO dto){
+        id = dto.getId();
+        fullName = dto.getFullName();
+        userName = dto.getUserName();
+        password = dto.getPassword();
+    }
 
     public List<String> getRoles(){
         List<String> roles = new ArrayList<>();
@@ -99,5 +114,13 @@ public class User extends RepresentationModel<User> implements Serializable, Use
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 }

@@ -1,6 +1,6 @@
 package com.imunizacao.vacina.controllers;
 
-import com.imunizacao.vacina.model.User;
+import com.imunizacao.vacina.model.dto.UserDTO;
 import com.imunizacao.vacina.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -23,10 +23,10 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private PagedResourcesAssembler<User> assembler;
+    private PagedResourcesAssembler<UserDTO> assembler;
 
     @PostMapping()
-    public User create(@RequestBody User user) throws Exception {
+    public UserDTO create(@RequestBody UserDTO user) throws Exception {
         var entity = userService.create(user);
 
         entity.add(linkTo(methodOn(UserController.class).findById(entity.getId())).withSelfRel());
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public User findById(@PathVariable("id") Long id) {
+    public UserDTO findById(@PathVariable("id") Long id) {
         var entity = userService.findById(id);
 
         entity.add(linkTo(methodOn(UserController.class).findById(entity.getId())).withSelfRel());
@@ -42,8 +42,8 @@ public class UserController {
     }
 
     @GetMapping(value = "/findByUsername/{username}")
-    public User findByUsername(@PathVariable("username") String username){
-        var entity = (User) userService.loadUserByUsername(username);
+    public UserDTO findByUsername(@PathVariable("username") String username){
+        var entity = (UserDTO) userService.loadUserByUsername(username);
 
         entity.add(linkTo(methodOn(UserController.class).findById(entity.getId())).withSelfRel());
         return entity;
