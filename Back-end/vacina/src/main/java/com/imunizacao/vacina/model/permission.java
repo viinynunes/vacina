@@ -1,5 +1,6 @@
 package com.imunizacao.vacina.model;
 
+import org.springframework.hateoas.RepresentationModel;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -7,12 +8,14 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "permission")
-public class Permission implements GrantedAuthority {
+public class Permission extends RepresentationModel<Permission> implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String description;
+
+    public Permission(){}
 
     public Permission(Long id, String description) {
         this.id = id;
