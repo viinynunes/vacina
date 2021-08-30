@@ -1,8 +1,6 @@
 package com.imunizacao.vacina.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.imunizacao.vacina.model.dto.VaccineCardDTO;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,23 +13,22 @@ public class VaccineCard implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "first_dose")
-    private Date firstDose;
     @Column(name = "second_dose")
-    private Date secondDose;
+    private Date registrationDate;
     @Column(name = "manufacture")
     private String manufacture;
     @Column(name = "city")
     private String city;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "person_id")
     private Person person;
 
-    public VaccineCard(Long id, Date firstDose, Date secondDose, String manufacture, String city, Person person) {
+    public VaccineCard(){}
+
+    public VaccineCard(Long id, Date registrationDate, String manufacture, String city, Person person) {
         this.id = id;
-        this.firstDose = firstDose;
-        this.secondDose = secondDose;
+        this.registrationDate = registrationDate;
         this.manufacture = manufacture;
         this.city = city;
         this.person = person;
@@ -39,8 +36,7 @@ public class VaccineCard implements Serializable {
 
     public VaccineCard(VaccineCardDTO dto){
         id = dto.getId();
-        firstDose = dto.getFirstDose();
-        secondDose = dto.getSecondDose();
+        registrationDate = dto.getRegistrationDate();
         manufacture = dto.getManufacture();
         city = dto.getCity();
 
@@ -55,20 +51,12 @@ public class VaccineCard implements Serializable {
         this.id = id;
     }
 
-    public Date getFirstDose() {
-        return firstDose;
+    public Date getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setFirstDose(Date firstDose) {
-        this.firstDose = firstDose;
-    }
-
-    public Date getSecondDose() {
-        return secondDose;
-    }
-
-    public void setSecondDose(Date secondDose) {
-        this.secondDose = secondDose;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public String getManufacture() {

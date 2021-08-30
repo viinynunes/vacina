@@ -22,11 +22,14 @@ public class VaccineCardService {
     private PersonRepository personRepository;
 
     public VaccineCardDTO create(VaccineCardDTO dto) throws Exception {
-        if (vaccineRepository.findByPerson(dto.getPerson().getCpf()) != null) {
+
+        var entity = vaccineRepository.findByPerson(dto.getPerson().getCpf());
+
+        if (entity != null) {
             throw new Exception("User " + dto.getPerson().getFullName() + " is already registered");
         }
 
-        dto.setFirstDose(new Date());
+        dto.setRegistrationDate(new Date());
         dto.setPerson(getPerson(dto.getPerson().getId()));
 
         return new VaccineCardDTO(vaccineRepository.save(new VaccineCard(dto)));

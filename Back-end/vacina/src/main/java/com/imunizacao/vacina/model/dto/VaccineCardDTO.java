@@ -10,17 +10,15 @@ import java.util.Date;
 public class VaccineCardDTO extends RepresentationModel<VaccineCardDTO> implements Serializable {
 
     private Long id;
-    private Date firstDose;
-    private Date secondDose;
+    private Date registrationDate;
     private String manufacture;
     private String city;
 
     private Person person;
 
-    public VaccineCardDTO(Long id, Date firstDose, Date secondDose, String manufacture, String city, Person person) {
+    public VaccineCardDTO(Long id, Date registrationDate, String manufacture, String city, Person person) {
         this.id = id;
-        this.firstDose = firstDose;
-        this.secondDose = secondDose;
+        this.registrationDate = registrationDate;
         this.manufacture = manufacture;
         this.city = city;
         this.person = person;
@@ -28,8 +26,7 @@ public class VaccineCardDTO extends RepresentationModel<VaccineCardDTO> implemen
 
     public VaccineCardDTO(VaccineCard entity){
         id = entity.getId();
-        firstDose = entity.getFirstDose();
-        secondDose = entity.getSecondDose();
+        registrationDate = entity.getRegistrationDate();
         manufacture = entity.getManufacture();
         city = entity.getCity();
         person = entity.getPerson();
@@ -43,20 +40,12 @@ public class VaccineCardDTO extends RepresentationModel<VaccineCardDTO> implemen
         this.id = id;
     }
 
-    public Date getFirstDose() {
-        return firstDose;
+    public Date getRegistrationDate() {
+        return registrationDate;
     }
 
-    public void setFirstDose(Date firstDose) {
-        this.firstDose = firstDose;
-    }
-
-    public Date getSecondDose() {
-        return secondDose;
-    }
-
-    public void setSecondDose(Date secondDose) {
-        this.secondDose = secondDose;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 
     public String getManufacture() {

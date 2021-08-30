@@ -1,6 +1,5 @@
 package com.imunizacao.vacina.repositories;
 
-import com.imunizacao.vacina.model.entities.Person;
 import com.imunizacao.vacina.model.entities.VaccineCard;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
