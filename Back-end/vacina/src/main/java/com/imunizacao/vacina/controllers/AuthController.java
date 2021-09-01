@@ -4,6 +4,8 @@ import com.imunizacao.vacina.model.entities.User;
 import com.imunizacao.vacina.security.AccountCredentialsDTO;
 import com.imunizacao.vacina.security.jwt.JWTTokenProvider;
 import com.imunizacao.vacina.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 
+@Api(tags = "Authentication")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -33,6 +36,7 @@ public class AuthController {
     @Autowired
     UserService userService;
 
+    @ApiOperation(value = "Used to make an authentication and get a token from server, that will used to get requests based on your permission")
     @PostMapping("/signing")
     public ResponseEntity<?> signing(@RequestBody AccountCredentialsDTO data){
         try{

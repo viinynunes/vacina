@@ -1,5 +1,8 @@
 package com.imunizacao.vacina.security;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+
+@JsonPropertyOrder({"username", "password"})
 public class AccountCredentialsDTO {
 
     private String username;

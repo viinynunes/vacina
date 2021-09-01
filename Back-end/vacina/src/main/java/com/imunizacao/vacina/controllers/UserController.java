@@ -2,6 +2,8 @@ package com.imunizacao.vacina.controllers;
 
 import com.imunizacao.vacina.model.dto.UserDTO;
 import com.imunizacao.vacina.services.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
-@ApiIgnore
+@Api(tags = "User")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -27,7 +29,8 @@ public class UserController {
     @Autowired
     private PagedResourcesAssembler<UserDTO> assembler;
 
-    @PostMapping()
+    @ApiOperation(value = "Used to create a new User")
+    @PostMapping
     public UserDTO create(@RequestBody UserDTO user) {
         var entity = userService.create(user);
 
@@ -35,6 +38,7 @@ public class UserController {
         return entity;
     }
 
+    @ApiOperation(value = "Used to get an user passing an ID")
     @GetMapping(value = "/{id}")
     public UserDTO findById(@PathVariable("id") Long id) {
         var entity = userService.findById(id);
@@ -43,6 +47,7 @@ public class UserController {
         return entity;
     }
 
+    @ApiOperation(value = "Used to get an user passing an username")
     @GetMapping(value = "/findByUsername/{username}")
     public UserDTO findByUsername(@PathVariable("username") String username){
         var entity = (UserDTO) userService.loadUserByUsername(username);
@@ -51,7 +56,8 @@ public class UserController {
         return entity;
     }
 
-    @GetMapping()
+    @ApiOperation(value = "Used to get all recorded users")
+    @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(value = "direction", defaultValue = "ASC") String direction,
                                      @RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "size", defaultValue = "10") int size){
