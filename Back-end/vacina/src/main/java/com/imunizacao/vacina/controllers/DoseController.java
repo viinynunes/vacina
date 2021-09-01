@@ -2,6 +2,8 @@ package com.imunizacao.vacina.controllers;
 
 import com.imunizacao.vacina.model.dto.DoseDTO;
 import com.imunizacao.vacina.services.DoseService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Api(tags = "Dose")
 @RestController
 @RequestMapping("/dose")
 public class DoseController {
@@ -25,13 +28,15 @@ public class DoseController {
     @Autowired
     private PagedResourcesAssembler<DoseDTO> assembler;
 
-    @GetMapping("/id{}")
+    @ApiOperation(value = "Used to find a dose searching by id")
+    @GetMapping("/{id}")
     public DoseDTO findById(@PathVariable("id") Long id) throws Exception{
         var entity = doseService.findById(id);
         addHateOS(entity);
         return entity;
     }
 
+    @ApiOperation(value = "Used to find all recorded doses")
     @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(value = "direction", defaultValue = "ASC") String direction,
                                      @RequestParam(value = "page", defaultValue = "0") int page,

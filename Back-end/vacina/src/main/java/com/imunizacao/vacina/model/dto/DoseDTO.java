@@ -1,6 +1,7 @@
 package com.imunizacao.vacina.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.imunizacao.vacina.model.entities.Dose;
 import com.imunizacao.vacina.model.entities.VaccineCard;
 import org.springframework.hateoas.RepresentationModel;
@@ -8,6 +9,7 @@ import org.springframework.hateoas.RepresentationModel;
 import java.io.Serializable;
 import java.util.Date;
 
+@JsonPropertyOrder({"id", "doseDate", "manufacture", "description", "vaccineCardDTO", "links"})
 public class DoseDTO extends RepresentationModel<DoseDTO> implements Serializable {
 
     private Long id;

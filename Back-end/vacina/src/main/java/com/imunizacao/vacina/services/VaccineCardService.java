@@ -81,6 +81,4 @@ public class VaccineCardService {
     private VaccineCardDTO convertToDTO(VaccineCard card) {
         return new VaccineCardDTO(card);
     }
-
-
 }

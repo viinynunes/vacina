@@ -1,5 +1,6 @@
 package com.imunizacao.vacina.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.imunizacao.vacina.model.entities.Dose;
 import com.imunizacao.vacina.model.entities.Person;
 import com.imunizacao.vacina.model.entities.VaccineCard;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@JsonPropertyOrder({"id", "registrationDate", "city", "person", "doseDTOList", "links"})
 public class VaccineCardDTO extends RepresentationModel<VaccineCardDTO> implements Serializable {
 
     private Long id;
