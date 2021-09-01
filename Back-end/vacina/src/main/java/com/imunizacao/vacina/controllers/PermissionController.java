@@ -28,7 +28,7 @@ public class PermissionController {
     private PagedResourcesAssembler<PermissionDTO> assembler;
 
     @PostMapping
-    public PermissionDTO create(@RequestBody PermissionDTO permission) throws Exception {
+    public PermissionDTO create(@RequestBody PermissionDTO permission) {
         var entity = permissionService.create(permission);
 
         entity.add(linkTo(methodOn(PermissionController.class).findById(entity.getId())).withSelfRel());

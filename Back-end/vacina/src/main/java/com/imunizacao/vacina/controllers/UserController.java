@@ -28,7 +28,7 @@ public class UserController {
     private PagedResourcesAssembler<UserDTO> assembler;
 
     @PostMapping()
-    public UserDTO create(@RequestBody UserDTO user) throws Exception {
+    public UserDTO create(@RequestBody UserDTO user) {
         var entity = userService.create(user);
 
         entity.add(linkTo(methodOn(UserController.class).findById(entity.getId())).withSelfRel());

@@ -1,5 +1,7 @@
 package com.imunizacao.vacina.services;
 
+import com.imunizacao.vacina.exception.ResourceAlreadyExists;
+import com.imunizacao.vacina.exception.ResourceNotFound;
 import com.imunizacao.vacina.model.entities.Permission;
 import com.imunizacao.vacina.model.entities.User;
 import com.imunizacao.vacina.model.dto.UserDTO;
@@ -40,9 +42,9 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public UserDTO create(UserDTO user) throws Exception {
+    public UserDTO create(UserDTO user) {
         if (userRepository.findByUserName(user.getUserName()) != null) {
-            throw new Exception("Username " + user.getUserName() + " alreary exists");
+            throw new ResourceAlreadyExists("Username " + user.getUserName() + " already exists");
         }
 
         var entity = new User(user);
@@ -52,14 +54,14 @@ public class UserService implements UserDetailsService {
         return new UserDTO(userRepository.save(entity));
     }
 
-    private List<Permission> getPermission(List<String> roles) throws Exception{
+    private List<Permission> getPermission(List<String> roles) {
 
         List<Permission> list = new ArrayList<>();
 
         for (String r : roles){
             var permission = permissionRepository.findById(Long.parseLong(r)).orElseThrow();
             if (permission == null){
-                throw new Exception("Permission " + r + " nao encontrada");
+                throw new ResourceNotFound("Permission " + r + " not found");
             } else {
                 list.add(permission);
             }
@@ -69,7 +71,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDTO findById(Long id){
-        var entity = userRepository.findById(id).orElseThrow();
+        var entity = userRepository.findById(id).orElseThrow(() -> new ResourceNotFound("User not found"));
 
         return new UserDTO(entity);
     }

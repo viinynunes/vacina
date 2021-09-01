@@ -30,7 +30,7 @@ public class PersonController {
 
     @ApiOperation(value = "EndPoint used to create a new Person")
     @PostMapping
-    public PersonDTO create(@RequestBody PersonDTO dto) throws Exception{
+    public PersonDTO create(@RequestBody PersonDTO dto) {
         var entity = personService.create(dto);
         entity.add(linkTo(methodOn(PersonController.class).findById(entity.getId())).withSelfRel());
 

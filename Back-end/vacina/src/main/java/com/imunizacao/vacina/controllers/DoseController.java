@@ -30,7 +30,7 @@ public class DoseController {
 
     @ApiOperation(value = "Used to find a dose searching by id")
     @GetMapping("/{id}")
-    public DoseDTO findById(@PathVariable("id") Long id) throws Exception{
+    public DoseDTO findById(@PathVariable("id") Long id) {
         var entity = doseService.findById(id);
         addHateOS(entity);
         return entity;
@@ -51,7 +51,7 @@ public class DoseController {
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
-    private void addHateOS(DoseDTO dto) throws Exception {
+    private void addHateOS(DoseDTO dto) {
         dto.add(linkTo(methodOn(DoseController.class).findById(dto.getId())).withSelfRel());
     }
 }

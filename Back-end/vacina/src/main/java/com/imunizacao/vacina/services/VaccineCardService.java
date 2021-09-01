@@ -1,5 +1,8 @@
 package com.imunizacao.vacina.services;
 
+import com.imunizacao.vacina.exception.ResourceAlreadyExists;
+import com.imunizacao.vacina.exception.ResourceIsEmpty;
+import com.imunizacao.vacina.exception.ResourceNotFound;
 import com.imunizacao.vacina.model.dto.DoseDTO;
 import com.imunizacao.vacina.model.dto.VaccineCardDTO;
 import com.imunizacao.vacina.model.entities.Dose;
@@ -27,12 +30,12 @@ public class VaccineCardService {
     @Autowired
     private DoseRepository doseRepository;
 
-    public VaccineCardDTO create(VaccineCardDTO dto) throws Exception {
+    public VaccineCardDTO create(VaccineCardDTO dto) {
 
         var entity = vaccineRepository.findByPersonID(dto.getPerson().getId());
 
         if (entity != null) {
-            throw new Exception(entity.getPerson().getFullName() + " already have a vaccine Card");
+            throw new ResourceAlreadyExists(entity.getPerson().getFullName() + " already have a vaccine Card");
         }
 
         dto.setRegistrationDate(new Date());
@@ -41,12 +44,13 @@ public class VaccineCardService {
         return new VaccineCardDTO(vaccineRepository.save(new VaccineCard(dto)));
     }
 
-    public VaccineCardDTO insertDose(Long vaccineCardID, DoseDTO doseDTO) throws Exception {
+    public VaccineCardDTO insertDose(Long vaccineCardID, DoseDTO doseDTO) {
         if (vaccineCardID == null || doseDTO == null) {
-            throw new Exception("Fields cannot be null");
+            throw new ResourceIsEmpty("Fields cannot be null");
         }
 
-        var vaccineEntity = vaccineRepository.findById(vaccineCardID).orElseThrow();
+        var vaccineEntity = vaccineRepository.findById(vaccineCardID).orElseThrow(() ->
+                new ResourceNotFound("Vaccine Card not found"));
 
         doseDTO.setDoseDate(new Date());
 
@@ -56,15 +60,16 @@ public class VaccineCardService {
     }
 
     public VaccineCardDTO findById(Long id) {
-        var entity = vaccineRepository.findById(id).orElseThrow();
+        var entity = vaccineRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFound("Vaccine Card not found"));
         return new VaccineCardDTO(entity);
     }
 
-    public VaccineCardDTO findByUserCPF(String cpf) throws Exception{
+    public VaccineCardDTO findByUserCPF(String cpf) {
         var entity = vaccineRepository.findByPersonCPF(cpf);
 
-        if (entity == null){
-            throw new Exception("User not found");
+        if (entity == null) {
+            throw new ResourceNotFound("User not found");
         } else
             return new VaccineCardDTO(entity);
     }

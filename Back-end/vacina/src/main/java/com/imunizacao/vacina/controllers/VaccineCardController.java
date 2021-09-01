@@ -35,7 +35,7 @@ public class VaccineCardController {
 
     @ApiOperation(value = "Used to create a new Vaccine Card. Needed to have an user already created")
     @PostMapping
-    public VaccineCardDTO create(@RequestBody VaccineCardDTO dto) throws Exception {
+    public VaccineCardDTO create(@RequestBody VaccineCardDTO dto) {
         var entity = vaccineService.create(dto);
 
         addHateOS(entity);
@@ -44,7 +44,7 @@ public class VaccineCardController {
 
     @ApiOperation(value = "Used to insert a Dose into vaccine Card. Needed to inform the vaccine card ID and the Dose manufacture and description")
     @PostMapping("/insertDose/{vaccineCardID}")
-    public VaccineCardDTO insertDose(@PathVariable("vaccineCardID") Long vaccineID, @RequestBody DoseDTO doseDTO) throws Exception{
+    public VaccineCardDTO insertDose(@PathVariable("vaccineCardID") Long vaccineID, @RequestBody DoseDTO doseDTO) {
 
         var entity = vaccineService.insertDose(vaccineID, doseDTO);
         addHateOS(entity);
@@ -62,7 +62,7 @@ public class VaccineCardController {
 
     @ApiOperation(value = "Used to find a recorded vaccine card searching by person cpf")
     @GetMapping("/findByPersonCpf/{cpf}")
-    public VaccineCardDTO findByPersonCpf(@PathVariable("cpf") String cpf) throws Exception {
+    public VaccineCardDTO findByPersonCpf(@PathVariable("cpf") String cpf) {
         var entity = vaccineService.findByUserCPF(cpf);
         addHateOS(entity);
         return entity;
