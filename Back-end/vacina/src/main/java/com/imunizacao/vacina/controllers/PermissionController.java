@@ -29,6 +29,7 @@ public class PermissionController {
 
     @PostMapping
     public PermissionDTO create(@RequestBody PermissionDTO permission) {
+        permission.setDescription(permission.getDescription().toUpperCase());
         var entity = permissionService.create(permission);
 
         entity.add(linkTo(methodOn(PermissionController.class).findById(entity.getId())).withSelfRel());

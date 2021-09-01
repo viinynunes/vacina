@@ -30,6 +30,8 @@ public class User implements Serializable, UserDetails {
         inverseJoinColumns = @JoinColumn(name = "permission_id"))
     private List<Permission> permissions = new ArrayList<>();
 
+    public User (){}
+
     public User(Long id, String fullName, String userName, String password, List<Permission> permissions) {
         this.id = id;
         this.fullName = fullName;

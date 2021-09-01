@@ -1,9 +1,6 @@
 package com.imunizacao.vacina.exception.handle;
 
-import com.imunizacao.vacina.exception.ExceptionResponse;
-import com.imunizacao.vacina.exception.ResourceAlreadyExists;
-import com.imunizacao.vacina.exception.ResourceIsEmpty;
-import com.imunizacao.vacina.exception.ResourceNotFound;
+import com.imunizacao.vacina.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -60,5 +57,16 @@ public class CustomizedResponseHandler extends ResponseEntityExceptionHandler {
         );
 
         return new ResponseEntity<>(exceptionResponse, HttpStatus.NO_CONTENT);
+    }
+
+    @ExceptionHandler(InvalidJWTToken.class)
+    public final ResponseEntity<ExceptionResponse> invalidJwtToken(Exception ex, WebRequest request){
+        ExceptionResponse exceptionResponse = new ExceptionResponse(
+                new Date(),
+                ex.getMessage(),
+                request.getDescription(false)
+        );
+
+        return new ResponseEntity<>(exceptionResponse, HttpStatus.NOT_ACCEPTABLE);
     }
 }

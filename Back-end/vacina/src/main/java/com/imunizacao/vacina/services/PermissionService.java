@@ -17,7 +17,7 @@ public class PermissionService {
     private PermissionRepository permissionRepository;
 
     public PermissionDTO create(PermissionDTO permission) {
-        if (permissionRepository.findByDescription(permission.getDescription()) != null) {
+        if (permissionRepository.findByDescription(permission.getDescription().toUpperCase()) != null) {
             throw new ResourceAlreadyExists("Permission " + permission.getDescription() + " already exists");
         }
 
