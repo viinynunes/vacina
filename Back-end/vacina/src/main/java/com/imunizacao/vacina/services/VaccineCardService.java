@@ -60,6 +60,15 @@ public class VaccineCardService {
         return new VaccineCardDTO(entity);
     }
 
+    public VaccineCardDTO findByUserCPF(String cpf) throws Exception{
+        var entity = vaccineRepository.findByPersonCPF(cpf);
+
+        if (entity == null){
+            throw new Exception("User not found");
+        } else
+            return new VaccineCardDTO(entity);
+    }
+
     public Page<VaccineCardDTO> findAll(Pageable pageable) {
         var entityList = vaccineRepository.findAll(pageable);
         return entityList.map(this::convertToDTO);

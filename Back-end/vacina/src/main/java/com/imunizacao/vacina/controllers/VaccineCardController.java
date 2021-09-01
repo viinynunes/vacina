@@ -54,6 +54,13 @@ public class VaccineCardController {
         return entity;
     }
 
+    @GetMapping("/findByPersonCpf/{cpf}")
+    public VaccineCardDTO findByPersonCpf(@PathVariable("cpf") String cpf) throws Exception {
+        var entity = vaccineService.findByUserCPF(cpf);
+        addHateOS(entity);
+        return entity;
+    }
+
     @GetMapping
     public ResponseEntity<?> findAll(@RequestParam(value = "direction", defaultValue = "ASC") String direction,
                                      @RequestParam(value = "page", defaultValue = "0") int page,
