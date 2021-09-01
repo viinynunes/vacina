@@ -1,9 +1,7 @@
 package com.imunizacao.vacina.controllers;
 
 import com.imunizacao.vacina.model.dto.DoseDTO;
-import com.imunizacao.vacina.model.dto.VaccineCardDTO;
 import com.imunizacao.vacina.services.DoseService;
-import com.imunizacao.vacina.services.VaccineCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -18,39 +16,19 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
-@RequestMapping("/vaccineCard")
-public class VaccineCardController {
-
-    @Autowired
-    private VaccineCardService vaccineService;
+@RequestMapping("/dose")
+public class DoseController {
 
     @Autowired
     private DoseService doseService;
 
     @Autowired
-    private PagedResourcesAssembler<VaccineCardDTO> assembler;
+    private PagedResourcesAssembler<DoseDTO> assembler;
 
-    @PostMapping
-    public VaccineCardDTO create(@RequestBody VaccineCardDTO dto) throws Exception {
-        var entity = vaccineService.create(dto);
-
+    @GetMapping("/id{}")
+    public DoseDTO findById(@PathVariable("id") Long id) throws Exception{
+        var entity = doseService.findById(id);
         addHateOS(entity);
-        return entity;
-    }
-
-    @PostMapping("/insertDose/{vaccineCardID}")
-    public VaccineCardDTO insertDose(@PathVariable("vaccineCardID") Long vaccineID, @RequestBody DoseDTO doseDTO) throws Exception{
-
-        var entity = vaccineService.insertDose(vaccineID, doseDTO);
-        addHateOS(entity);
-        return entity;
-    }
-
-    @GetMapping(value = "/{id}")
-    public VaccineCardDTO findById(@PathVariable("id") Long id) {
-        var entity = vaccineService.findById(id);
-
-        entity.add(linkTo(methodOn(VaccineCardService.class).findById(entity.getId())).withSelfRel());
         return entity;
     }
 
@@ -58,20 +36,17 @@ public class VaccineCardController {
     public ResponseEntity<?> findAll(@RequestParam(value = "direction", defaultValue = "ASC") String direction,
                                      @RequestParam(value = "page", defaultValue = "0") int page,
                                      @RequestParam(value = "size", defaultValue = "10") int size){
-
         var sortDirection = direction.equalsIgnoreCase("DESC") ? Sort.Direction.DESC : Sort.Direction.ASC;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "person"));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDirection, "doseDate"));
 
-        var entityList = vaccineService.findAll(pageable);
+        var entityList = doseService.findAll(pageable);
 
         PagedModel<?> model = assembler.toModel(entityList);
 
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
-    private void addHateOS(VaccineCardDTO dto){
-        dto.add(linkTo(methodOn(VaccineCardController.class).findById(dto.getId())).withSelfRel());
+    private void addHateOS(DoseDTO dto) throws Exception {
+        dto.add(linkTo(methodOn(DoseController.class).findById(dto.getId())).withSelfRel());
     }
-
-
 }

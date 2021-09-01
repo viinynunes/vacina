@@ -1,8 +1,11 @@
 package com.imunizacao.vacina.services;
 
+import com.imunizacao.vacina.model.dto.DoseDTO;
 import com.imunizacao.vacina.model.dto.VaccineCardDTO;
+import com.imunizacao.vacina.model.entities.Dose;
 import com.imunizacao.vacina.model.entities.Person;
 import com.imunizacao.vacina.model.entities.VaccineCard;
+import com.imunizacao.vacina.repositories.DoseRepository;
 import com.imunizacao.vacina.repositories.PersonRepository;
 import com.imunizacao.vacina.repositories.VaccineCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,9 @@ public class VaccineCardService {
     @Autowired
     private PersonRepository personRepository;
 
+    @Autowired
+    private DoseRepository doseRepository;
+
     public VaccineCardDTO create(VaccineCardDTO dto) throws Exception {
 
         var entity = vaccineRepository.findByPerson(dto.getPerson().getCpf());
@@ -33,6 +39,20 @@ public class VaccineCardService {
         dto.setPerson(getPerson(dto.getPerson().getId()));
 
         return new VaccineCardDTO(vaccineRepository.save(new VaccineCard(dto)));
+    }
+
+    public VaccineCardDTO insertDose(Long vaccineCardID, DoseDTO doseDTO) throws Exception{
+        if (vaccineCardID == null || doseDTO == null){
+            throw new Exception("Fields cannot be null");
+        }
+
+        var vaccineEntity = vaccineRepository.findById(vaccineCardID).orElseThrow();
+
+        doseDTO.setDoseDate(new Date());
+
+        vaccineEntity.addDose(doseRepository.save(new Dose(doseDTO, vaccineEntity)));
+
+        return new VaccineCardDTO(vaccineRepository.save(vaccineEntity));
     }
 
     public VaccineCardDTO findById(Long id){
