@@ -29,10 +29,10 @@ public class VaccineCardService {
 
     public VaccineCardDTO create(VaccineCardDTO dto) throws Exception {
 
-        var entity = vaccineRepository.findByPerson(dto.getPerson().getCpf());
+        var entity = vaccineRepository.findByPersonID(dto.getPerson().getId());
 
         if (entity != null) {
-            throw new Exception("User " + dto.getPerson().getFullName() + " is already registered");
+            throw new Exception(entity.getPerson().getFullName() + " already have a vaccine Card");
         }
 
         dto.setRegistrationDate(new Date());
@@ -41,8 +41,8 @@ public class VaccineCardService {
         return new VaccineCardDTO(vaccineRepository.save(new VaccineCard(dto)));
     }
 
-    public VaccineCardDTO insertDose(Long vaccineCardID, DoseDTO doseDTO) throws Exception{
-        if (vaccineCardID == null || doseDTO == null){
+    public VaccineCardDTO insertDose(Long vaccineCardID, DoseDTO doseDTO) throws Exception {
+        if (vaccineCardID == null || doseDTO == null) {
             throw new Exception("Fields cannot be null");
         }
 
@@ -55,12 +55,12 @@ public class VaccineCardService {
         return new VaccineCardDTO(vaccineRepository.save(vaccineEntity));
     }
 
-    public VaccineCardDTO findById(Long id){
+    public VaccineCardDTO findById(Long id) {
         var entity = vaccineRepository.findById(id).orElseThrow();
         return new VaccineCardDTO(entity);
     }
 
-    public Page<VaccineCardDTO> findAll(Pageable pageable){
+    public Page<VaccineCardDTO> findAll(Pageable pageable) {
         var entityList = vaccineRepository.findAll(pageable);
         return entityList.map(this::convertToDTO);
     }
@@ -69,7 +69,7 @@ public class VaccineCardService {
         return personRepository.findById(id).orElseThrow();
     }
 
-    private VaccineCardDTO convertToDTO(VaccineCard card){
+    private VaccineCardDTO convertToDTO(VaccineCard card) {
         return new VaccineCardDTO(card);
     }
 

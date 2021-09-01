@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface VaccineCardRepository extends JpaRepository<VaccineCard, Long> {
 
-    @Query("SELECT v FROM VaccineCard v INNER JOIN v.person p WHERE p.cpf = :cpf")
-    VaccineCard findByPerson (String cpf);
+    @Query("SELECT v FROM VaccineCard v INNER JOIN v.person p WHERE p.id = :id")
+    VaccineCard findByPersonID(Long id);
 }
