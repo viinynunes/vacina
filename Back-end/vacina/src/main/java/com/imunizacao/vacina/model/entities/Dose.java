@@ -1,12 +1,10 @@
 package com.imunizacao.vacina.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.imunizacao.vacina.model.dto.DoseDTO;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.Objects;
 
 @Entity
 @Table(name = "dose")

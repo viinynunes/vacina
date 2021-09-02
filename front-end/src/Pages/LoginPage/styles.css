@@ -1,0 +1,47 @@
+.container {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 180px;
+}
+
+.container form {
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.container form input {
+    font-size: 25px;
+    margin: 10px;
+}
+
+.container form .button {
+    display: flex;
+    align-items: center;
+}
+
+.container form .button button {
+    width: 100%;
+
+    font-size: 18px;
+    margin: 10px;
+
+    cursor: pointer;
+
+    background-color: rgb(106, 220, 240);
+
+    border: 1px solid black;
+    border-radius: 4px;
+    color: black;
+
+    transition: 0.8s;
+}
+
+.container form .button button:hover {
+    background-color: rgb(52, 38, 80);
+    color: white;
+}
